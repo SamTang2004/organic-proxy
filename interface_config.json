@@ -1,0 +1,37 @@
+{
+  "prompt_textarea": "ms-chunk-input ms-autosize-textarea textarea",
+
+  "input_settings" : {
+    "position" :  "/html/body/app-root/ms-app/div/div/div[2]/div/span/ms-prompt-switcher/ms-chunk-editor/section/div/div/ms-zero-state/div[2]/div/footer/ms-prompt-input-wrapper/div/div/div/div[1]/ms-chunk-input/section/ms-text-chunk/ms-autosize-textarea",
+    "name": "data-value"
+  },
+
+  "send_button": "run-button button",
+
+  "stop_button": "run-button button",
+
+  "response_area": "ms-chat-session",
+
+  "clear_history": "a.nav-item[href='/app/prompts/new_chat']",
+
+  "response_chunk_indicator": "ms-chat-turn > div > div:last-child"
+,
+
+  "completion_indicator": "run-button button",
+
+  "temperature_setting" : {
+    "position" : "input.mdc-slider__input:near(:text(\"Temperature\"))",
+    "name": "aria-valuetext"
+  },
+
+  "top_p_setting": {
+    "position" :"input.mdc-slider__input:near(:text(\"Top P\"))",
+    "name": "aria-valuetext"
+  },
+
+  "output_length_setting":{
+    "position" : "//*[@id=\"mat-input-0\"]"
+  },
+
+  "last_used_debug_link" : "http://localhost:9222"
+}
