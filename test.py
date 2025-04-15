@@ -1,6 +1,7 @@
 
 # "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222
 # start msedge --remote-debugging-port=9222
+# "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --remote-debugging-port=9222 --user-data-dir="C:\temp\edge-debug-profile"
 # Use edge as the API provider, chrome runs sillytavern
 
 # Run method:

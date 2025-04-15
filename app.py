@@ -7,6 +7,7 @@ from contextlib import asynccontextmanager
 from typing import Any, AsyncGenerator, Dict, Optional
 
 import uvicorn
+from click import style
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from playwright.async_api import (
@@ -16,6 +17,8 @@ from playwright.async_api import (
     Error as PlaywrightError, expect,
 )
 from pydantic import BaseModel
+
+from markdownify import markdownify
 
 # --- Configuration ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -456,10 +459,9 @@ async def create_completion(request: CompletionRequest, http_request: Request):
         try:
 
             # FIRST -> click the refresh
-            logging.info("awaiting refresh button click")
-            await refresh_btn.click()
+            logging.info("awaiting refresh")
 
-
+            await page.reload(wait_until="domcontentloaded", timeout = 60000)
 
             # --- Set Parameters (if applicable) ---
             await set_ui_parameters(page, config, request) # Best effort
@@ -472,7 +474,13 @@ async def create_completion(request: CompletionRequest, http_request: Request):
             for message in request.messages:
                 final_str += f'''\n\n{message['role']} ：{message['content']} '''
 
-            await prompt_area.fill(final_str)
+            #await prompt_area.fill(final_str, timeout = 1000000)
+            # prompt area filling with direct JS involvement
+
+            await prompt_area.evaluate(
+                '(element, text) => { element.value = text; element.dispatchEvent(new Event("input", { bubbles: true })); element.dispatchEvent(new Event("change", { bubbles: true })); }',
+                final_str)
+
             await asyncio.sleep(0.1) # Small delay in case of JS listeners
 
             # --- Click Send ---
@@ -594,6 +602,14 @@ async def create_completion(request: CompletionRequest, http_request: Request):
 
                             # Get final text *after* waiting
                             final_text = await response_locator.text_content() or ""
+
+
+                            # Now, convert <div> to markdown format.
+                            final_inner_html = await response_locator.inner_html()
+                            markdown_final = markdownify(final_inner_html, heading_style='ATX')
+
+                            final_text = str(markdown_final)
+
                             logging.info(f"Non-streaming generation completed. Length: {len(final_text)}")
 
                         except asyncio.CancelledError:

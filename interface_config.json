@@ -33,5 +33,5 @@
     "position" : "//*[@id=\"mat-input-0\"]"
   },
 
-  "last_used_debug_link" : "http://localhost:9222"
+  "last_used_debug_link" : "http://127.0.0.1:9222"
 }
